@@ -24,7 +24,7 @@ extern NSString* const NSBundlePlistType;
 - (NSString*) tempPathForResourceURL:(NSURL*) download;
 
 /** @returns the remote URL for the resource specified */
-- (NSURL*) liveURLForResource:(NSString*) resource ofType:(NSString*) type;
+- (NSURL*) liveURLForResource:(NSString*) resource withExtension:(NSString*) type;
 
 /** @returns the live path for the remote URL specified */
 - (NSString*) livePathForResourceURL:(NSURL*) download;

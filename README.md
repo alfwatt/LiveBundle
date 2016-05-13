@@ -1,8 +1,9 @@
+
 # LiveBundle
 
 ## Keep your Resources Fresh
 
-NSBundle category to provide dynamic updating of resources from your web server.
+NSBundle+LiveBundle is a category to provide dynamic updating of resources from your web server.
 
 Let's say you have a resource, any resource will do, but for e.g. this product_table.plist which displays
 a lis of your companies products in a custom view inside MyApplication:
@@ -18,26 +19,27 @@ so that your app can check to see if there is an updated version of the resource
     https://exaple.com/support/livebundle/com.example.myapplication/products_table.plist
 
 LiveBundle makes a If-Modified-Since request to your server when the resource is requested. It then downloads
-the resource, and copies it into the users's library folder:
+the resource, and copies it into the users's library folder (or it's sandboxed equivalent):
 
     ~/Library/Application Support/MyApplication/LiveBundle/com.example.myapplication/products_table.plist
 
 And that's the path that your code sees when it asks for the resource:
 
-    NSString* live_path = [[NSBundle mainBundle] livePathForResource:@"products_table" of type:@"plist"];
-    NSDictionary* products_table = [NSDictionary dictionaryWithContentsOfFile:livePath];
+    NSString* livePath = [[NSBundle mainBundle] livePathForResource:@"productsTable" ofType:@"plist"];
+    NSDictionary* productsTable = [NSDictionary dictionaryWithContentsOfFile:livePath];
 
-And that's the object that you can subscribe to be notified for updates to (or just watch the file path yourelf):
+    // Subscribe to be notified for updates to the file path (or just watch the file path yourelf):
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:ILLiveBundleResourceUpdateNote 
-                                                      object:live_path
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *note)
-    {
-        NSLog(@"%@ was updated!", [note object]);
-        products_table = [NSDictionary dictionaryWithContentsOfFile:livePath];
-        // update the ui...
-    }];
+    [[NSNotificationCenter defaultCenter] 
+        addObserverForName:ILLiveBundleResourceUpdateNote 
+        object:livePth 
+        queue:nil 
+        usingBlock:^(NSNotification *note)
+        {
+            NSLog(@"%@ was updated!", [note object]);
+            products_table = [NSDictionary dictionaryWithContentsOfFile:livePath];
+            // update the ui...
+        }];
 
 This works well for data that changes on a weekly or monthly basis, the app should only check a URL once per launch.
 

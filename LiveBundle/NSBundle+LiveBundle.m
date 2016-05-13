@@ -44,7 +44,7 @@ NSString* const NSBundlePlistType = @"plist";
              stringByAppendingPathComponent:[self bundleIdentifier]];
 }
 
-- (NSURL*) liveURLForResource:(NSString*) resource ofType:(NSString*) type
+- (NSURL*) liveURLForResource:(NSString*) resource withExtension:(NSString*) type
 {
     NSString* liveBundleURL = [[self infoDictionary] objectForKey:ILLiveBundleURLKey]; // this is set per-bundle
     return [NSURL URLWithString:[[liveBundleURL stringByAppendingPathComponent:resource] stringByAppendingPathExtension:type]];
@@ -76,7 +76,7 @@ NSString* const NSBundlePlistType = @"plist";
 
 - (NSString*) livePathForResource:(NSString*) resource ofType:(NSString*) type
 {
-    NSURL* liveResourceURL = [self liveURLForResource:resource ofType:type];
+    NSURL* liveResourceURL = [self liveURLForResource:resource withExtension:type];
     NSString* staticPath = [self pathForResource:resource ofType:type];
     NSString* liveResourcePath = [self livePathForResourceURL:liveResourceURL]; // this interns the string
 
