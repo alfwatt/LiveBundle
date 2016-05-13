@@ -60,7 +60,7 @@ This works well for data that changes on a weekly or monthly basis, the app shou
 
     The MIT License (MIT)
 
-    Copyright (c) 2015 Alf Watt
+    Copyright (c) 2015-2016 Alf Watt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
