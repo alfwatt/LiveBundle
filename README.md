@@ -34,10 +34,8 @@ And that's the path that your code sees when it asks for the resource:
         addObserverForName:ILLiveBundleResourceUpdateNote 
         object:livePth 
         queue:nil 
-        usingBlock:^(NSNotification *note)
-        {
-            NSLog(@"%@ was updated!", [note object]);
-            products_table = [NSDictionary dictionaryWithContentsOfFile:livePath];
+        usingBlock:^(NSNotification *note) {
+            productsTable = [NSDictionary dictionaryWithContentsOfFile:livePath];
             // update the ui...
         }];
 

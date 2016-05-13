@@ -44,7 +44,7 @@ NSString* const NSBundlePlistType = @"plist";
              stringByAppendingPathComponent:[self bundleIdentifier]];
 }
 
-- (NSURL*) liveURLForResource:(NSString*) resource withExtension:(NSString*) type
+- (NSURL*) remoteURLForResource:(NSString*) resource withExtension:(NSString*) type
 {
     NSString* liveBundleURL = [[self infoDictionary] objectForKey:ILLiveBundleURLKey]; // this is set per-bundle
     return [NSURL URLWithString:[[liveBundleURL stringByAppendingPathComponent:resource] stringByAppendingPathExtension:type]];
@@ -76,9 +76,9 @@ NSString* const NSBundlePlistType = @"plist";
 
 - (NSString*) livePathForResource:(NSString*) resource ofType:(NSString*) type
 {
-    NSURL* liveResourceURL = [self liveURLForResource:resource withExtension:type];
+    NSURL* remoteResourceURL = [self remoteURLForResource:resource withExtension:type];
     NSString* staticPath = [self pathForResource:resource ofType:type];
-    NSString* liveResourcePath = [self livePathForResourceURL:liveResourceURL]; // this interns the string
+    NSString* liveResourcePath = [self livePathForResourceURL:remoteResourceURL]; // this interns the string
 
     if( liveResourcePath) {
         NSFileManager* fm = [NSFileManager defaultManager];
@@ -124,7 +124,7 @@ NSString* const NSBundlePlistType = @"plist";
         liveInfo = [fm attributesOfItemAtPath:liveResourcePath error:nil];
 
         // make sure the developer isn't a complete idiot
-        if( [liveResourceURL.scheme isEqualToString:@"https"]) {
+        if( [remoteResourceURL.scheme isEqualToString:@"https"]) {
             NSDate* resourceModificationTime = [staticInfo fileModificationDate];
 
             // get the date of the current live file, if it's not a link to the static file
@@ -133,7 +133,7 @@ NSString* const NSBundlePlistType = @"plist";
 
             // check for an existing temp file, remove it
             // TODO check for other downloads running in parallel
-            NSString* tempFilePath = [self tempPathForResourceURL:liveResourceURL];
+            NSString* tempFilePath = [self tempPathForResourceURL:remoteResourceURL];
             NSString* tempFileDir = [tempFilePath stringByDeletingLastPathComponent];
 
             
@@ -157,7 +157,7 @@ NSString* const NSBundlePlistType = @"plist";
 
             // start a request against liveResourceURL and send a request with If-Modified-Since header
             NSMutableURLRequest* downloadRequest = [NSMutableURLRequest new];
-            [downloadRequest setURL:liveResourceURL];
+            [downloadRequest setURL:remoteResourceURL];
             [downloadRequest addValue:[resourceModificationTime rfc1123String] forHTTPHeaderField:@"If-Modified-Since"];
 
             downloadRequest.cachePolicy = NSURLRequestReloadIgnoringCacheData;
@@ -171,13 +171,18 @@ NSString* const NSBundlePlistType = @"plist";
         else NSLog(@"WARNING livePathForResource can't load live bundle resrouces over an insecure connection. Or won't.");
     }
     else {
-        NSLog(@"WARNING livePathForResource:%@ ofType:%@ could not determine liveResourcePath from URL: %@ (did you set ILLiveBundleURLKey in your Info.plist?) returning static path %@", resource, type, liveResourceURL, staticPath);
+        NSLog(@"WARNING livePathForResource:%@ ofType:%@ could not determine liveResourcePath from URL: %@ (did you set ILLiveBundleURLKey in your Info.plist?) returning static path %@", resource, type, remoteResourceURL, staticPath);
         liveResourcePath = staticPath; // just provide the static path if the url hasn't been configured
     }
 
 exit:
     
     return liveResourcePath;
+}
+
+- (NSURL*) liveURLForResource:(NSString*) resource withExtension:(NSString*) type
+{
+    return [NSURL fileURLWithPath:[self livePathForResource:resource ofType:type]];
 }
 
 #pragma mark - 
