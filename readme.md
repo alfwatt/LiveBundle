@@ -1,0 +1,81 @@
+# LiveBundle
+
+## Keep your Resources Fresh
+
+NSBundle category to provide dynamic updating of resources from your web server.
+
+Let's say you have a resource, any resource will do, but for e.g. this product_table.plist which displays
+a lis of your companies products in a custom view inside MyApplication:
+
+    MyApplication.app/Contents/Resources/product_table.plist
+
+And let's say you want to discontinue a product, or change a price, but don't want to release
+a new version of your app or write a web server that understand your product line and hosts an API.
+
+LiveBundle provides infrastructure for hosting bundle resources on your web server at a URL that you specify,
+so that your app can check to see if there is an updated version of the resource avaliable for download:
+
+    https://exaple.com/support/livebundle/com.example.myapplication/products_table.plist
+
+LiveBundle makes a If-Modified-Since request to your server when the resource is requested. It then downloads
+the resource, and copies it into the users's library folder:
+
+    ~/Library/Application Support/MyApplication/LiveBundle/com.example.myapplication/products_table.plist
+
+And that's the path that your code sees when it asks for the resource:
+
+    NSString* live_path = [[NSBundle mainBundle] livePathForResource:@"products_table" of type:@"plist"];
+    NSDictionary* products_table = [NSDictionary dictionaryWithContentsOfFile:livePath];
+
+And that's the object that you can subscribe to be notified for updates to (or just watch the file path yourelf):
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:ILLiveBundleResourceUpdateNote 
+                                                      object:live_path
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note)
+    {
+        NSLog(@"%@ was updated!", [note object]);
+        products_table = [NSDictionary dictionaryWithContentsOfFile:livePath];
+        // update the ui...
+    }];
+
+This works well for data that changes on a weekly or monthly basis, the app should only check a URL once per launch.
+
+## Using LiveBundle in your App
+
+- include the `LiveBundle.framework` in your applications `Resources/Frameworks` directory
+    - link the `LiveBundle.framework` to all the targets which produce bundles you would like to update
+- add a key to the `Info.plist` of all the `NSBundle`s you want to update pionting to the web server
+    - `ILLiveBundleURLKey` is the base url for the bundles resources
+        - e.g. `https://example.com/livebundle/`
+    - when calling `livePathForResource:` the URL is prepended to the resource requested
+        - e.g. `livePathForResource:@"resource.plist"` is `https://example.com/livebundle/resource.plist`
+- add a UI element to disable LiveBundle if the user doesn't want updates:
+    - bind the element's value to the `NSUserDefaults` key: `ILLiveBundleDisableUpdates`
+    - checkboxes work well if you use `NSNegateBoolean` with the phrase `Automatically Update Resources on Startup`
+    - it will be selected by default, and the user disabling will set the value to YES
+- deploy resources to your web server and test before you ship!
+
+## License
+
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Alf Watt
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.

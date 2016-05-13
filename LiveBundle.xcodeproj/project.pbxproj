@@ -1,0 +1,294 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		75E666D11A36E4C2001E7DC4 /* LiveBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E666D01A36E4C2001E7DC4 /* LiveBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75E666F21A36E4E9001E7DC4 /* NSBundle+LiveBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E666F01A36E4E9001E7DC4 /* NSBundle+LiveBundle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		75E666F31A36E4E9001E7DC4 /* NSBundle+LiveBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E666F11A36E4E9001E7DC4 /* NSBundle+LiveBundle.m */; };
+		75E666F71A3711BE001E7DC4 /* NSDate+RFC1123.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E666F51A3711BE001E7DC4 /* NSDate+RFC1123.h */; };
+		75E666F81A3711BE001E7DC4 /* NSDate+RFC1123.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E666F61A3711BE001E7DC4 /* NSDate+RFC1123.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		75E666CB1A36E4C2001E7DC4 /* LiveBundle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveBundle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		75E666CF1A36E4C2001E7DC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		75E666D01A36E4C2001E7DC4 /* LiveBundle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveBundle.h; sourceTree = "<group>"; };
+		75E666F01A36E4E9001E7DC4 /* NSBundle+LiveBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+LiveBundle.h"; sourceTree = "<group>"; };
+		75E666F11A36E4E9001E7DC4 /* NSBundle+LiveBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+LiveBundle.m"; sourceTree = "<group>"; };
+		75E666F41A36E56E001E7DC4 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		75E666F51A3711BE001E7DC4 /* NSDate+RFC1123.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+RFC1123.h"; sourceTree = "<group>"; };
+		75E666F61A3711BE001E7DC4 /* NSDate+RFC1123.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+RFC1123.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		75E666C71A36E4C2001E7DC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		75E666C11A36E4C2001E7DC4 = {
+			isa = PBXGroup;
+			children = (
+				75E666F41A36E56E001E7DC4 /* readme.md */,
+				75E666CD1A36E4C2001E7DC4 /* LiveBundle */,
+				75E666CC1A36E4C2001E7DC4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		75E666CC1A36E4C2001E7DC4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75E666CB1A36E4C2001E7DC4 /* LiveBundle.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		75E666CD1A36E4C2001E7DC4 /* LiveBundle */ = {
+			isa = PBXGroup;
+			children = (
+				75E666CF1A36E4C2001E7DC4 /* Info.plist */,
+				75E666D01A36E4C2001E7DC4 /* LiveBundle.h */,
+				75E666F01A36E4E9001E7DC4 /* NSBundle+LiveBundle.h */,
+				75E666F11A36E4E9001E7DC4 /* NSBundle+LiveBundle.m */,
+				75E666F51A3711BE001E7DC4 /* NSDate+RFC1123.h */,
+				75E666F61A3711BE001E7DC4 /* NSDate+RFC1123.m */,
+			);
+			path = LiveBundle;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		75E666C81A36E4C2001E7DC4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75E666D11A36E4C2001E7DC4 /* LiveBundle.h in Headers */,
+				75E666F21A36E4E9001E7DC4 /* NSBundle+LiveBundle.h in Headers */,
+				75E666F71A3711BE001E7DC4 /* NSDate+RFC1123.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		75E666CA1A36E4C2001E7DC4 /* LiveBundle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75E666E11A36E4C3001E7DC4 /* Build configuration list for PBXNativeTarget "LiveBundle" */;
+			buildPhases = (
+				75E666C61A36E4C2001E7DC4 /* Sources */,
+				75E666C71A36E4C2001E7DC4 /* Frameworks */,
+				75E666C81A36E4C2001E7DC4 /* Headers */,
+				75E666C91A36E4C2001E7DC4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LiveBundle;
+			productName = LiveBundle;
+			productReference = 75E666CB1A36E4C2001E7DC4 /* LiveBundle.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		75E666C21A36E4C2001E7DC4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = iStumbler;
+				TargetAttributes = {
+					75E666CA1A36E4C2001E7DC4 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 75E666C51A36E4C2001E7DC4 /* Build configuration list for PBXProject "LiveBundle" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 75E666C11A36E4C2001E7DC4;
+			productRefGroup = 75E666CC1A36E4C2001E7DC4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				75E666CA1A36E4C2001E7DC4 /* LiveBundle */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		75E666C91A36E4C2001E7DC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		75E666C61A36E4C2001E7DC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75E666F31A36E4E9001E7DC4 /* NSBundle+LiveBundle.m in Sources */,
+				75E666F81A3711BE001E7DC4 /* NSDate+RFC1123.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		75E666DF1A36E4C3001E7DC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		75E666E01A36E4C3001E7DC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		75E666E21A36E4C3001E7DC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = LiveBundle/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		75E666E31A36E4C3001E7DC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = LiveBundle/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		75E666C51A36E4C2001E7DC4 /* Build configuration list for PBXProject "LiveBundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75E666DF1A36E4C3001E7DC4 /* Debug */,
+				75E666E01A36E4C3001E7DC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75E666E11A36E4C3001E7DC4 /* Build configuration list for PBXNativeTarget "LiveBundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75E666E21A36E4C3001E7DC4 /* Debug */,
+				75E666E31A36E4C3001E7DC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 75E666C21A36E4C2001E7DC4 /* Project object */;
+}
