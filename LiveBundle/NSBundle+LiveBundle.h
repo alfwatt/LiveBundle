@@ -7,8 +7,6 @@ extern NSString* const ILLiveBundleURLKey;
 /*! @const notification sent when a given plugin resource has been updated */
 extern NSString* const ILLiveBundleResourceUpdateNote;
 
-extern NSString* const NSBundlePlistType;
-
 @interface NSBundle (LiveBundle) <NSURLDownloadDelegate>
 
 /*! @returns the NSBundle in the current application with the named resource of the type provided */
@@ -25,9 +23,6 @@ extern NSString* const NSBundlePlistType;
 
 /*! @returns the temp path for downloading a particular URL */
 - (NSString*) tempPathForResourceURL:(NSURL*) download;
-
-/*! @returns the live file: URL for the resource specified */
-- (NSURL*) liveURLForResource:(NSString*) resource withExtension:(NSString*) type;
 
 /*! @returns the live path for the remote URL specified */
 - (NSString*) livePathForResourceURL:(NSURL*) download;

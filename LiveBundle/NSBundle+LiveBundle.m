@@ -5,8 +5,6 @@ NSString* const ILLiveBundles = @"LiveBundles";
 NSString* const ILLiveBundleURLKey = @"ILLiveBundleURLKey";
 NSString* const ILLiveBundleResourceUpdateNote = @"PluginLiveBundleResourceUpdateNote";
 
-NSString* const NSBundlePlistType = @"plist";
-
 #pragma mark -
 
 @implementation NSBundle (LiveBundle)
@@ -178,11 +176,6 @@ NSString* const NSBundlePlistType = @"plist";
 exit:
     
     return liveResourcePath;
-}
-
-- (NSURL*) liveURLForResource:(NSString*) resource withExtension:(NSString*) type
-{
-    return [NSURL fileURLWithPath:[self livePathForResource:resource ofType:type]];
 }
 
 #pragma mark - 
