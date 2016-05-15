@@ -166,7 +166,7 @@ NSString* const ILLiveBundleResourceUpdateNote = @"PluginLiveBundleResourceUpdat
             NSURLDownload* download = [[NSURLDownload alloc] initWithRequest:downloadRequest delegate:self];
             [download setDestination:tempFilePath allowOverwrite:YES];
         }
-        else NSLog(@"WARNING livePathForResource can't load live bundle resrouces over an insecure connection. Or won't.");
+        else NSLog(@"WARNING livePathForResource will not load resrouces over an insecure connection.\n\nUse https://letsencrypt.org to get free SSL certs for your site\n\n");
     }
     else {
         NSLog(@"WARNING livePathForResource:%@ ofType:%@ could not determine liveResourcePath from URL: %@ (did you set ILLiveBundleURLKey in your Info.plist?) returning static path %@", resource, type, remoteResourceURL, staticPath);

@@ -5,21 +5,23 @@
 
 NSBundle+LiveBundle is a category to provide dynamic updating of resources from your web server.
 
-Let's say you have a resource, any resource will do, but for e.g. this product_table.plist which displays
-a lis of your companies products in a custom view inside MyApplication:
+Let's say you have a resource, any resource will do, but for e.g. a plist which contains
+a list of your companies products which is stored inside MyApplication's bundle as a resource:
 
     MyApplication.app/Contents/Resources/productTable.plist
 
-And let's say you want to discontinue a product, or change a price, but don't want to release
-a new version of your app or write a web server that understand your product line and hosts an API.
+And let's say you want to add a new product, or change a price for asale, or update a link, but
+don't want to release a new version of your app or write a web server that hosts an API or the
+code to support it?
 
-LiveBundle provides infrastructure for hosting bundle resources on your web server at a URL that you specify,
-so that your app can check to see if there is an updated version of the resource avaliable for download:
+LiveBundle provides infrastructure for hosting bundle resources on your web server at a URL that
+you specify, so that your app can check to see if there is an updated version of the resource
+avaliable for download:
 
     https://exaple.com/support/livebundle/com.example.myapplication/productsTable.plist
 
-LiveBundle makes a If-Modified-Since request to your server when the resource is requested. It then downloads
-the resource, and copies it into the users's library folder (or it's sandboxed equivalent):
+LiveBundle makes a If-Modified-Since request to your server when the resource is requested. It
+then downloads the resource, and copies it into the users's Library folder (or it's sandboxed equivalent):
 
     ~/Library/Application Support/MyApplication/LiveBundle/com.example.myapplication/products_table.plist
 
@@ -39,7 +41,13 @@ And that's the path that your code sees when it asks for the resource:
             // update the ui...
         }];
 
-This works well for data that changes on a weekly or monthly basis, the app should only check a URL once per launch.
+The initial path is a link back to the resource in the application's bundle, once an updated version
+has been sucesfully downloaded the 
+
+This works well for data that changes on a weekly or monthly basis, the app should only check a URL
+once per launch, or as much as daily if it's running for a long time.
+
+TODO Certificte Pinning Support on top of the existing SSL Nag
 
 ## Using LiveBundle in your App
 
