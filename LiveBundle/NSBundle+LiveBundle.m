@@ -4,7 +4,7 @@
 NSString* const ILLiveBundles = @"LiveBundles";
 NSString* const ILLiveBundleURLKey = @"ILLiveBundleURLKey";
 NSString* const ILLiveBundleResourceUpdateNote = @"PluginLiveBundleResourceUpdateNote";
-NSString* const IPPlistType = @"plist";
+NSString* const ILPlistType = @"plist";
 
 #pragma mark -
 
