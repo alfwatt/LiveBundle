@@ -7,6 +7,8 @@ extern NSString* const ILLiveBundleURLKey;
 /*! @const notification sent when a given plugin resource has been updated */
 extern NSString* const ILLiveBundleResourceUpdateNote;
 
+extern NSString* const ILPlistType;
+
 @interface NSBundle (LiveBundle) <NSURLDownloadDelegate>
 
 /*! @returns the NSBundle in the current application with the named resource of the type provided */
