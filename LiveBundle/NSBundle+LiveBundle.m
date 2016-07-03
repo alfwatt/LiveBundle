@@ -95,6 +95,8 @@ NSString* const ILPlistType = @"plist";
         NSDictionary* liveInfo = nil;
         NSDictionary* staticInfo = [fm attributesOfItemAtPath:staticPath error:nil];
 
+        // XXX check for Developer/Xcode/DerivedData in the staticPath
+        
         // does the live bundle path exist?
         if( [fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
             liveInfo = [fm attributesOfItemAtPath:liveResourcePath error:nil];
@@ -107,14 +109,14 @@ NSString* const ILPlistType = @"plist";
                 }
                 
                 if( ![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:nil]) {
-                    NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@", staticPath, liveResourcePath, error);
+                    NSLog(@"ERROR in livePathForResrouce can't link after removing: %@ -> %@ error: %@", staticPath, liveResourcePath, error);
                     return staticPath;
                 }
             }
         }
         else { // if not, just link in the static path
             if( ![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:&error]) {
-                NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@", staticPath, liveResourcePath, error);
+                NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@ info: %@", staticPath, liveResourcePath, error, staticInfo);
                 return staticPath;
             }
         }
