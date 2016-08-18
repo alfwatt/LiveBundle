@@ -95,30 +95,35 @@ NSString* const ILPlistType = @"plist";
         NSDictionary* liveInfo = nil;
         NSDictionary* staticInfo = [fm attributesOfItemAtPath:staticPath error:nil];
 
-        // XXX check for Developer/Xcode/DerivedData in the staticPath
-        
-        // does the live bundle path exist?
-        if( [fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
-            liveInfo = [fm attributesOfItemAtPath:liveResourcePath error:nil];
-            
-            if( ([liveInfo fileType] != NSFileTypeSymbolicLink) // nothing to do if it's a link already
-               && ([[staticInfo fileModificationDate] timeIntervalSinceDate:[liveInfo fileModificationDate]] > 0)) { // check the dates on the file, was the bundle updated?
-                if( ![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
-                    NSLog(@"ERROR in livePathForResource can't remove: %@ error: %@", liveResourcePath, error);
-                    return staticPath;
-                }
+        // check for Xcode/DerivedData in the staticPath, don't link up build products
+        if ([staticPath rangeOfString:@"Xcode/DerivedData"].location == NSNotFound) {
+            // does the live bundle path exist?
+            if( [fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
+                liveInfo = [fm attributesOfItemAtPath:liveResourcePath error:nil];
                 
-                if( ![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:nil]) {
-                    NSLog(@"ERROR in livePathForResrouce can't link after removing: %@ -> %@ error: %@", staticPath, liveResourcePath, error);
+                if( ([liveInfo fileType] != NSFileTypeSymbolicLink) // nothing to do if it's a link already
+                   && ([[staticInfo fileModificationDate] timeIntervalSinceDate:[liveInfo fileModificationDate]] > 0)) { // check the dates on the file, was the bundle updated?
+                    if( ![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
+                        NSLog(@"ERROR in livePathForResource can't remove: %@ error: %@", liveResourcePath, error);
+                        return staticPath;
+                    }
+                    
+                    if( ![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:nil]) {
+                        NSLog(@"ERROR in livePathForResrouce can't link after removing: %@ -> %@ error: %@", staticPath, liveResourcePath, error);
+                        return staticPath;
+                    }
+                }
+            }
+            else { // if not, just link in the static path
+                if( ![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:&error]) {
+                    NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@ info: %@", staticPath, liveResourcePath, error, staticInfo);
                     return staticPath;
                 }
             }
         }
-        else { // if not, just link in the static path
-            if( ![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:&error]) {
-                NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@ info: %@", staticPath, liveResourcePath, error, staticInfo);
-                return staticPath;
-            }
+        else {
+            NSLog(@"DEBUG LiveBundle staticPath: %@ liveResourcePath: %@", staticPath, liveResourcePath);
+            return staticPath;
         }
 
         // info may have changed
