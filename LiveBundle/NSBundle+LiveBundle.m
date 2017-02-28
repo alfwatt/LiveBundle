@@ -77,15 +77,15 @@ NSString* const ILPlistType = @"plist";
 {
     NSURL* remoteResourceURL = [self remoteURLForResource:resource withExtension:type];
     NSString* staticPath = [self pathForResource:resource ofType:type];
-    NSString* liveResourcePath = [self livePathForResourceURL:remoteResourceURL]; // this interns the string
+    NSString* liveResourcePath = [self livePathForResourceURL:remoteResourceURL]; // interned the string
 
-    if( liveResourcePath) {
+    if (liveResourcePath) {
         NSFileManager* fm = [NSFileManager defaultManager];
         NSError* error = nil;
 
         // check for existing live files
-        if( ![fm fileExistsAtPath:[self liveBundlePath] isDirectory:nil]) {
-            if( ![fm createDirectoryAtPath:[self liveBundlePath] withIntermediateDirectories:YES attributes:nil error:&error]) {
+        if (![fm fileExistsAtPath:[self liveBundlePath] isDirectory:nil]) {
+            if (![fm createDirectoryAtPath:[self liveBundlePath] withIntermediateDirectories:YES attributes:nil error:&error]) {
                 NSLog(@"ERROR in livePathForResource can't create: %@ error: %@", [self liveBundlePath], error);
                 return staticPath;
             }
@@ -98,31 +98,35 @@ NSString* const ILPlistType = @"plist";
         // check for Xcode/DerivedData in the staticPath, don't link up build products
         if ([staticPath rangeOfString:@"Xcode/DerivedData"].location == NSNotFound) {
             // does the live bundle path exist?
-            if( [fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
+            if ([fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
                 liveInfo = [fm attributesOfItemAtPath:liveResourcePath error:nil];
                 
-                if( ([liveInfo fileType] != NSFileTypeSymbolicLink) // nothing to do if it's a link already
-                   && ([[staticInfo fileModificationDate] timeIntervalSinceDate:[liveInfo fileModificationDate]] > 0)) { // check the dates on the file, was the bundle updated?
-                    if( ![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
-                        NSLog(@"ERROR in livePathForResource can't remove: %@ error: %@", liveResourcePath, error);
+                // check the dates on the file, was the bundle updated?
+                if (([liveInfo fileType] != NSFileTypeSymbolicLink) // nothing to do if it's a link already
+                && ([[staticInfo fileModificationDate] timeIntervalSinceDate:[liveInfo fileModificationDate]] > 0)) {
+                    // remove the old version of the resource from the live path
+                    if (![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
+                        NSLog(@"ERROR in LiveBundle livePathForResource can't remove: %@ error: %@", liveResourcePath, error);
                         return staticPath;
                     }
-                    
-                    if( ![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:nil]) {
-                        NSLog(@"ERROR in livePathForResrouce can't link after removing: %@ -> %@ error: %@", staticPath, liveResourcePath, error);
+                    // link in the updated resource from the app bundle
+                    if (![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:nil]) {
+                        NSLog(@"ERROR in LiveBundle livePathForResrouce can't link after removing: %@ -> %@ error: %@",
+                            staticPath, liveResourcePath, error);
                         return staticPath;
                     }
                 }
             }
             else { // if not, just link in the static path
-                if( ![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:&error]) {
-                    NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@ info: %@", staticPath, liveResourcePath, error, staticInfo);
+                if (![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:&error]) {
+                    NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@ info: %@",
+                        staticPath, liveResourcePath, error, staticInfo);
                     return staticPath;
                 }
             }
         }
         else {
-            NSLog(@"DEBUG LiveBundle staticPath: %@ liveResourcePath: %@", staticPath, liveResourcePath);
+            NSLog(@"DEBUG LiveBundle using staticPath: %@ remoteURL: %@", staticPath, remoteResourceURL);
             return staticPath;
         }
 
@@ -130,33 +134,34 @@ NSString* const ILPlistType = @"plist";
         liveInfo = [fm attributesOfItemAtPath:liveResourcePath error:nil];
 
         // make sure the developer isn't a complete idiot
-        if( [remoteResourceURL.scheme isEqualToString:@"https"]) {
+        if ([remoteResourceURL.scheme isEqualToString:@"https"]) {
             NSDate* resourceModificationTime = [staticInfo fileModificationDate];
 
             // get the date of the current live file, if it's not a link to the static file
-            if( [liveInfo fileType] != NSFileTypeSymbolicLink)
+            if ([liveInfo fileType] != NSFileTypeSymbolicLink) {
                 resourceModificationTime = [liveInfo fileModificationDate];
+            }
 
             // check for an existing temp file, remove it
             // TODO check for other downloads running in parallel
             NSString* tempFilePath = [self tempPathForResourceURL:remoteResourceURL];
             NSString* tempFileDir = [tempFilePath stringByDeletingLastPathComponent];
-
             
-            if( ![fm fileExistsAtPath:tempFileDir isDirectory:nil]) {
-                if( ![fm createDirectoryAtPath:tempFileDir withIntermediateDirectories:YES attributes:nil error:&error]) {
+            if (![fm fileExistsAtPath:tempFileDir isDirectory:nil]) {
+                if (![fm createDirectoryAtPath:tempFileDir withIntermediateDirectories:YES attributes:nil error:&error]) {
                     NSLog(@"ERROR in livePathForResource can't create: %@ error: %@", tempFileDir, error);
                     return staticPath;
                 }
             }
 
-            if( [fm fileExistsAtPath:tempFilePath isDirectory:nil]
-             && ![fm removeItemAtURL:[NSURL fileURLWithPath:tempFilePath] error:&error]) {
-                NSLog(@"ERROR in livePathForResource can't remove temp file: %@ error: %@", [NSURL fileURLWithPath:tempFilePath], error);
+            if ([fm fileExistsAtPath:tempFilePath isDirectory:nil]
+            && ![fm removeItemAtURL:[NSURL fileURLWithPath:tempFilePath] error:&error]) {
+                NSLog(@"ERROR in livePathForResource can't remove temp file: %@ error: %@",
+                    [NSURL fileURLWithPath:tempFilePath], error);
                 return staticPath;
             }
             
-            if( ![fm createFileAtPath:tempFilePath contents:nil attributes:nil]) {
+            if (![fm createFileAtPath:tempFilePath contents:nil attributes:nil]) {
                 NSLog(@"ERROR in livePathForResource can't create: %@", tempFilePath);
                 return staticPath;
             }
@@ -201,10 +206,10 @@ exit:
 - (void)download:(NSURLDownload*) download didReceiveResponse:(NSURLResponse*) response
 {
     // check for a response to see if the content exists and has been updated changed
-    if( [response isKindOfClass:[NSHTTPURLResponse class]]) {
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSInteger connectionStatus = [(NSHTTPURLResponse*)response statusCode];
         
-        if( connectionStatus != 200) { // 404 and 304 would be the most common, but any non standard return should stop loading
+        if (connectionStatus != 200) { // 404 and 304 would be the most common, but any non standard return should stop loading
             [download cancel];
         }
     }
