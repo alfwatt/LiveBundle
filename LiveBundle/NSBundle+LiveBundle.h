@@ -9,7 +9,7 @@ extern NSString* const ILLiveBundleResourceUpdateNote;
 
 extern NSString* const ILPlistType;
 
-@interface NSBundle (LiveBundle) <NSURLDownloadDelegate>
+@interface NSBundle (LiveBundle) <NSURLSessionDelegate>
 
 /*! @returns the NSBundle in the current application with the named resource of the type provided */
 + (NSBundle*) bundleWithResource:(NSString*) name ofType:(NSString*) extension;

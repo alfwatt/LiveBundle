@@ -176,8 +176,15 @@ NSString* const ILPlistType = @"plist";
             downloadRequest.timeoutInterval = 30; // shorter maybe?
             downloadRequest.HTTPMethod = @"GET";
 
-            NSURLDownload* download = [[NSURLDownload alloc] initWithRequest:downloadRequest delegate:self];
-            [download setDestination:tempFilePath allowOverwrite:YES];
+            NSURLSession* session = [NSURLSession
+                sessionWithConfiguration:[NSURLSessionConfiguration ephemeralSessionConfiguration]
+                delegate:self
+                delegateQueue:[NSOperationQueue mainQueue]];
+            NSURLSessionTask* download = [session downloadTaskWithRequest:downloadRequest];
+            [download resume];
+            
+            // NSURLDownload* download = [[NSURLDownload alloc] initWithRequest:downloadRequest delegate:self];
+            // [download setDestination:tempFilePath allowOverwrite:YES];
         }
         else NSLog(@"WARNING livePathForResource will not load resrouces over an insecure connection.\n\nUse https://letsencrypt.org to get free SSL certs for your site\n\n");
     }
@@ -191,7 +198,83 @@ exit:
     return liveResourcePath;
 }
 
-#pragma mark - 
+#pragma mark - NSURLSessionDelegate Methods
+
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
+{
+    if (error) {
+        NSLog(@"URLSession: %@ didBecomeInvalidWithError: %@", session, error);
+    }
+}
+
+#pragma mark - NSURLSessionTaskDelegate Methods
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task willPerformHTTPRedirection:(NSHTTPURLResponse *)response newRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLRequest *))completionHandler
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didFinishCollectingMetrics:(NSURLSessionTaskMetrics *)metrics
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+    
+}
+
+#pragma mark - NSURLSessionDownloadDelegate Methods
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)download didFinishDownloadingToURL:(NSURL *)fileURL
+{
+    NSString* liveResourcePath = [self livePathForResourceURL:download.originalRequest.URL];
+    
+    NSFileManager* fm = [NSFileManager defaultManager];
+    NSError* error = nil;
+    
+    // TODO check integrety of the temp file against HTTP MD5 header if provided
+    
+    // is something at the liveResourcePath already? we should remove that
+    if( [fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
+        if( ![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
+            NSLog(@"ERROR in connectionDidFinishLoading can't remove: %@ error: %@", liveResourcePath, error);
+            goto exit;
+        }
+    }
+    
+    // the landing site it clear, move the temp file over to the resrouce path
+    if( ![fm moveItemAtPath:fileURL.path toPath:liveResourcePath error:&error]) {
+        NSLog(@"ERROR in connectionDidFinishLoading can't move: %@ -> %@ error: %@", fileURL.path, liveResourcePath, error);
+        goto exit;
+    }
+    
+    //    if( DEBUG) NSLog(@"LiveBundle updated: %@", liveResourcePath);
+    
+    // file was moved into place sucessfully, tell the world
+    [[NSNotificationCenter defaultCenter] postNotificationName:ILLiveBundleResourceUpdateNote object:liveResourcePath];
+    
+exit:
+    return;
+}
+
+/*
+#pragma mark - NSURLDownloadDelegate Methods
 
 - (void)downloadDidBegin:(NSURLDownload*) download
 {
@@ -272,5 +355,6 @@ exit:
 {
 //    NSLog(@"ERROR NSBundle+LiveBundle download: %@ didFailWithError: %@", download, error);
 }
+*/
 
 @end

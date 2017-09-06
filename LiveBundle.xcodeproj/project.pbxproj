@@ -15,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		75BE81011F5F7DA900453938 /* LiveBundle copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LiveBundle copy-Info.plist"; path = "/Users/alf/Source/LiveBundle/LiveBundle copy-Info.plist"; sourceTree = "<absolute>"; };
 		75E666CB1A36E4C2001E7DC4 /* LiveBundle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveBundle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75E666CF1A36E4C2001E7DC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75E666D01A36E4C2001E7DC4 /* LiveBundle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveBundle.h; sourceTree = "<group>"; };
@@ -42,6 +43,7 @@
 				75E666F41A36E56E001E7DC4 /* README.md */,
 				75E666CD1A36E4C2001E7DC4 /* LiveBundle */,
 				75E666CC1A36E4C2001E7DC4 /* Products */,
+				75BE81011F5F7DA900453938 /* LiveBundle copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -256,6 +258,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.istumbler.labs.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphone iphonesimulator";
 			};
 			name = Debug;
 		};
@@ -274,6 +277,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.istumbler.labs.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphone iphonesimulator";
 			};
 			name = Release;
 		};
