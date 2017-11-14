@@ -13,8 +13,8 @@ NSString* const ILPlistType = @"plist";
 + (NSBundle*) bundleWithResource:(NSString*) name ofType:(NSString*) extension
 {
     NSBundle* firstMatch = nil;
-    for( NSBundle* appBundle in [NSBundle allBundles]) {
-        if( [appBundle pathForResource:name ofType:extension]) {
+    for (NSBundle* appBundle in [NSBundle allBundles]) {
+        if ([appBundle pathForResource:name ofType:extension]) {
             firstMatch = appBundle;
             break; // for
         }
@@ -25,8 +25,8 @@ NSString* const ILPlistType = @"plist";
 + (NSBundle*) frameworkWithResource:(NSString*) name ofType:(NSString*) extension
 {
     NSBundle* firstMatch = nil;
-    for( NSBundle* frameworkBundle in [NSBundle allFrameworks]) {
-        if( [frameworkBundle pathForResource:name ofType:extension]) {
+    for (NSBundle* frameworkBundle in [NSBundle allFrameworks]) {
+        if ([frameworkBundle pathForResource:name ofType:extension]) {
             firstMatch = frameworkBundle;
             break; // for
         }
@@ -54,11 +54,11 @@ NSString* const ILPlistType = @"plist";
 {
     static NSMutableDictionary* pathCache; // holds the interened paths, so that the NSNotifications are delivered
 
-    if( !pathCache) {
+    if (!pathCache) {
         pathCache = [NSMutableDictionary new];
     }
     
-    if( download && ![pathCache objectForKey:download]) {
+    if (download && ![pathCache objectForKey:download]) {
         NSString* resourceFile = [download lastPathComponent];
         NSString* liveResourcePath = [[self liveBundlePath] stringByAppendingPathComponent:resourceFile];
         [pathCache setObject:liveResourcePath forKey:download];
@@ -95,39 +95,41 @@ NSString* const ILPlistType = @"plist";
         NSDictionary* liveInfo = nil;
         NSDictionary* staticInfo = [fm attributesOfItemAtPath:staticPath error:nil];
 
+#ifdef DEVELOPMENT
         // check for Xcode/DerivedData in the staticPath, don't link up build products
-        if ([staticPath rangeOfString:@"Xcode/DerivedData"].location == NSNotFound) {
-            // does the live bundle path exist?
-            if ([fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
-                liveInfo = [fm attributesOfItemAtPath:liveResourcePath error:nil];
-                
-                // check the dates on the file, was the bundle updated?
-                if (([liveInfo fileType] != NSFileTypeSymbolicLink) // nothing to do if it's a link already
-                && ([[staticInfo fileModificationDate] timeIntervalSinceDate:[liveInfo fileModificationDate]] > 0)) {
-                    // remove the old version of the resource from the live path
-                    if (![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
-                        NSLog(@"ERROR in LiveBundle livePathForResource can't remove: %@ error: %@", liveResourcePath, error);
-                        return staticPath;
-                    }
-                    // link in the updated resource from the app bundle
-                    if (![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:nil]) {
-                        NSLog(@"ERROR in LiveBundle livePathForResrouce can't link after removing: %@ -> %@ error: %@",
-                            staticPath, liveResourcePath, error);
-                        return staticPath;
-                    }
+        if ([staticPath rangeOfString:@"Xcode/DerivedData"].location != NSNotFound) {
+            NSLog(@"DEBUG LiveBundle using staticPath: %@ remoteURL: %@", staticPath, remoteResourceURL);
+            return staticPath;
+        }
+#endif
+        
+        // does the live bundle path exist?
+        if ([fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
+            liveInfo = [fm attributesOfItemAtPath:liveResourcePath error:nil];
+            
+            // check the dates on the file, was the bundle updated?
+            if (([liveInfo fileType] != NSFileTypeSymbolicLink) // nothing to do if it's a link already
+             && (([[staticInfo fileModificationDate] timeIntervalSinceDate:[liveInfo fileModificationDate]] > 0) // check for old-ness
+              || ([liveInfo fileSize] == 0))) { // also cleanup any random empty files
+                // remove the old or empty version of the resource from the live path
+                if (![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
+                    NSLog(@"ERROR in LiveBundle livePathForResource can't remove: %@ error: %@", liveResourcePath, error);
+                    return staticPath;
                 }
-            }
-            else { // if not, just link in the static path
-                if (![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:&error]) {
-                    NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@ info: %@",
-                        staticPath, liveResourcePath, error, staticInfo);
+                // link in the updated resource from the app bundle
+                if (![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:nil]) {
+                    NSLog(@"ERROR in LiveBundle livePathForResrouce can't link after removing: %@ -> %@ error: %@",
+                        staticPath, liveResourcePath, error);
                     return staticPath;
                 }
             }
         }
-        else {
-            NSLog(@"DEBUG LiveBundle using staticPath: %@ remoteURL: %@", staticPath, remoteResourceURL);
-            return staticPath;
+        else { // if not, just link in the static path
+            if (![fm createSymbolicLinkAtPath:liveResourcePath withDestinationPath:staticPath error:&error]) {
+                NSLog(@"ERROR in livePathForResrouce can't link: %@ -> %@ error: %@ info: %@",
+                    staticPath, liveResourcePath, error, staticInfo);
+                return staticPath;
+            }
         }
 
         // info may have changed
@@ -140,30 +142,6 @@ NSString* const ILPlistType = @"plist";
             // get the date of the current live file, if it's not a link to the static file
             if ([liveInfo fileType] != NSFileTypeSymbolicLink) {
                 resourceModificationTime = [liveInfo fileModificationDate];
-            }
-
-            // check for an existing temp file, remove it
-            // TODO check for other downloads running in parallel
-            NSString* tempFilePath = [self tempPathForResourceURL:remoteResourceURL];
-            NSString* tempFileDir = [tempFilePath stringByDeletingLastPathComponent];
-            
-            if (![fm fileExistsAtPath:tempFileDir isDirectory:nil]) {
-                if (![fm createDirectoryAtPath:tempFileDir withIntermediateDirectories:YES attributes:nil error:&error]) {
-                    NSLog(@"ERROR in livePathForResource can't create: %@ error: %@", tempFileDir, error);
-                    return staticPath;
-                }
-            }
-
-            if ([fm fileExistsAtPath:tempFilePath isDirectory:nil]
-            && ![fm removeItemAtURL:[NSURL fileURLWithPath:tempFilePath] error:&error]) {
-                NSLog(@"ERROR in livePathForResource can't remove temp file: %@ error: %@",
-                    [NSURL fileURLWithPath:tempFilePath], error);
-                return staticPath;
-            }
-            
-            if (![fm createFileAtPath:tempFilePath contents:nil attributes:nil]) {
-                NSLog(@"ERROR in livePathForResource can't create: %@", tempFilePath);
-                return staticPath;
             }
 
             // start a request against liveResourceURL and send a request with If-Modified-Since header
@@ -182,9 +160,6 @@ NSString* const ILPlistType = @"plist";
                 delegateQueue:[NSOperationQueue mainQueue]];
             NSURLSessionTask* download = [session downloadTaskWithRequest:downloadRequest];
             [download resume];
-            
-            // NSURLDownload* download = [[NSURLDownload alloc] initWithRequest:downloadRequest delegate:self];
-            // [download setDestination:tempFilePath allowOverwrite:YES];
         }
         else NSLog(@"WARNING livePathForResource will not load resrouces over an insecure connection.\n\nUse https://letsencrypt.org to get free SSL certs for your site\n\n");
     }
@@ -211,150 +186,64 @@ exit:
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 {
-    
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task willPerformHTTPRedirection:(NSHTTPURLResponse *)response newRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLRequest *))completionHandler
 {
-    
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didFinishCollectingMetrics:(NSURLSessionTaskMetrics *)metrics
 {
-    
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    
 }
 
 #pragma mark - NSURLSessionDownloadDelegate Methods
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
 {
-    
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)download didFinishDownloadingToURL:(NSURL *)fileURL
 {
-    NSString* liveResourcePath = [self livePathForResourceURL:download.originalRequest.URL];
-    
-    NSFileManager* fm = [NSFileManager defaultManager];
-    NSError* error = nil;
-    
-    // TODO check integrety of the temp file against HTTP MD5 header if provided
-    
-    // is something at the liveResourcePath already? we should remove that
-    if( [fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
-        if( ![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
-            NSLog(@"ERROR in connectionDidFinishLoading can't remove: %@ error: %@", liveResourcePath, error);
-            goto exit;
-        }
-    }
-    
-    // the landing site it clear, move the temp file over to the resrouce path
-    if( ![fm moveItemAtPath:fileURL.path toPath:liveResourcePath error:&error]) {
-        NSLog(@"ERROR in connectionDidFinishLoading can't move: %@ -> %@ error: %@", fileURL.path, liveResourcePath, error);
-        goto exit;
-    }
-    
-    //    if( DEBUG) NSLog(@"LiveBundle updated: %@", liveResourcePath);
-    
-    // file was moved into place sucessfully, tell the world
-    [[NSNotificationCenter defaultCenter] postNotificationName:ILLiveBundleResourceUpdateNote object:liveResourcePath];
-    
-exit:
-    return;
-}
-
-/*
-#pragma mark - NSURLDownloadDelegate Methods
-
-- (void)downloadDidBegin:(NSURLDownload*) download
-{
-//    NSLog(@"NSBundle+LiveBundle downloadDidBegin: %@", download);
-}
-
-- (NSURLRequest *)download:(NSURLDownload*) download willSendRequest:(NSURLRequest*) request redirectResponse:(NSURLResponse*) redirectResponse
-{
-    return request;
-}
-
-- (void)download:(NSURLDownload*) download didReceiveResponse:(NSURLResponse*) response
-{
-    // check for a response to see if the content exists and has been updated changed
-    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-        NSInteger connectionStatus = [(NSHTTPURLResponse*)response statusCode];
+    if ([download.response isKindOfClass:[NSHTTPURLResponse class]] && [(NSHTTPURLResponse*)download.response statusCode] == 200) { // OK!
+        NSString* liveResourcePath = [self livePathForResourceURL:download.originalRequest.URL];
         
-        if (connectionStatus != 200) { // 404 and 304 would be the most common, but any non standard return should stop loading
-            [download cancel];
+        NSFileManager* fm = [NSFileManager defaultManager];
+        NSError* error = nil;
+        
+        // TODO check integrety of the temp file against HTTP MD5 header if provided
+        
+        // is something at the liveResourcePath already? we should remove that
+        if ([fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
+            if (![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
+                NSLog(@"ERROR in connectionDidFinishLoading can't remove: %@ error: %@", liveResourcePath, error);
+                goto exit;
+            }
         }
-    }
-}
-
-- (void)download:(NSURLDownload*) download willResumeWithResponse:(NSURLResponse*) response fromByte:(long long)startingByte
-{
-//    NSLog(@"NSBundle+LiveBundle download: %@ willResumeWithResponse: %@ fromByte: %lli", download.request.URL, response, startingByte);
-}
-
-- (void)download:(NSURLDownload*) download didReceiveDataOfLength:(NSUInteger) length
-{
-//    NSLog(@"NSBundle+LiveBundle download: %@ didReceiveDataOfLength: %li", download.request.URL, length);
-}
-
-- (BOOL)download:(NSURLDownload*) download shouldDecodeSourceDataOfMIMEType:(NSString*) encodingType
-{
-    return YES;
-}
-
-- (void)download:(NSURLDownload*) download didCreateDestination:(NSString*) path
-{
-//    NSLog(@"NSBundle+LiveBundle download: %@ didCreateDestination: %@", download.request.URL, path);
-}
-
-- (void)downloadDidFinish:(NSURLDownload*) download
-{
-    NSString* tempFile = [self tempPathForResourceURL:download.request.URL];
-    NSString* liveResourcePath = [self livePathForResourceURL:download.request.URL];
-    
-    NSFileManager* fm = [NSFileManager defaultManager];
-    NSError* error = nil;
-
-    // TODO check integrety of the temp file against HTTP MD5 header if provided
-    
-    // is something at the liveResourcePath already? we should remove that
-    if( [fm fileExistsAtPath:liveResourcePath isDirectory:nil]) {
-        if( ![fm removeItemAtURL:[NSURL fileURLWithPath:liveResourcePath] error:&error]) {
-            NSLog(@"ERROR in connectionDidFinishLoading can't remove: %@ error: %@", liveResourcePath, error);
+        
+        // the landing site it clear, move the temp file over to the resrouce path
+        if (![fm moveItemAtPath:fileURL.path toPath:liveResourcePath error:&error]) {
+            NSLog(@"ERROR in connectionDidFinishLoading can't move: %@ -> %@ error: %@", fileURL.path, liveResourcePath, error);
             goto exit;
         }
+        
+        //    if( DEBUG) NSLog(@"LiveBundle updated: %@", liveResourcePath);
+        
+        // file was moved into place sucessfully, tell the world
+        [[NSNotificationCenter defaultCenter] postNotificationName:ILLiveBundleResourceUpdateNote object:liveResourcePath];
     }
-    
-    // the landing site it clear, move the temp file over to the resrouce path
-    if( ![fm moveItemAtPath:tempFile toPath:liveResourcePath error:&error]) {
-        NSLog(@"ERROR in connectionDidFinishLoading can't move: %@ -> %@ error: %@", tempFile, liveResourcePath, error);
-        goto exit;
+    else {
+        // NSLog(@"NOTE: session %@ ended with response: %@", session, download.response); // 304 is expected for out of date items
     }
-    
-//    if( DEBUG) NSLog(@"LiveBundle updated: %@", liveResourcePath);
-    
-    // file was moved into place sucessfully, tell the world
-    [[NSNotificationCenter defaultCenter] postNotificationName:ILLiveBundleResourceUpdateNote object:liveResourcePath];
-    
 exit:
     return;
 }
-
-- (void)download:(NSURLDownload*) download didFailWithError:(NSError*) error
-{
-//    NSLog(@"ERROR NSBundle+LiveBundle download: %@ didFailWithError: %@", download, error);
-}
-*/
 
 @end
