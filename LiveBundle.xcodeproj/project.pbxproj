@@ -270,7 +270,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.istumbler.labs.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "macosx iphone iphonesimulator";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator";
 			};
 			name = Debug;
 		};
@@ -289,7 +289,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.istumbler.labs.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "macosx iphone iphonesimulator";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator";
 			};
 			name = Release;
 		};
