@@ -3,20 +3,18 @@
 
 ## Keep your Resources Fresh
 
-NSBundle+LiveBundle is a category to provide dynamic updating of resources from your web server.
+`NSBundle+LiveBundle` is a category which provides dynamic updating of resources from your web server.
 
-Let's say you have a resource, any resource will do, but for e.g. a plist which contains
-a list of your companies products which is stored inside MyApplication's bundle as a resource:
+Let's say you have a resource, any resource will do, but for e.g. a plist which contains a list of your companies
+products, their prices, and links to purchase them; which is stored inside MyApplication's bundle as a resource:
 
     MyApplication.app/Contents/Resources/productTable.plist
 
-And let's say you want to add a new product, or change a price for asale, or update a link, but
-don't want to release a new version of your app or write a web server that hosts an API or the
-code to support it?
+And let's say you want to add a new product, or change a price for asale, or update a link, but don't want to
+release a new version of your app or write a web server that hosts an API or the code to support it?
 
-LiveBundle provides infrastructure for hosting bundle resources on your web server at a URL that
-you specify, so that your app can check to see if there is an updated version of the resource
-avaliable for download:
+LiveBundle provides infrastructure for hosting bundle resources on your web server at a URL that you specify,
+so that your app can check to see if there is an updated version of the resource avaliable for download:
 
     https://exaple.com/support/livebundle/com.example.myapplication/productsTable.plist
 
