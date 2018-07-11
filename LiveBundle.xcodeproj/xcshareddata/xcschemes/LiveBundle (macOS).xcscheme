@@ -16,21 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "75E666CA1A36E4C2001E7DC4"
                BuildableName = "LiveBundle.framework"
-               BlueprintName = "LiveBundle"
-               ReferencedContainer = "container:LiveBundle.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "75E666D51A36E4C3001E7DC4"
-               BuildableName = "LiveBundleTests.xctest"
-               BlueprintName = "LiveBundleTests"
+               BlueprintName = "LiveBundle (macOS)"
                ReferencedContainer = "container:LiveBundle.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "75E666D51A36E4C3001E7DC4"
-               BuildableName = "LiveBundleTests.xctest"
-               BlueprintName = "LiveBundleTests"
-               ReferencedContainer = "container:LiveBundle.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "75E666CA1A36E4C2001E7DC4"
-            BuildableName = "LiveBundle.framework"
-            BlueprintName = "LiveBundle"
-            ReferencedContainer = "container:LiveBundle.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -80,7 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "75E666CA1A36E4C2001E7DC4"
             BuildableName = "LiveBundle.framework"
-            BlueprintName = "LiveBundle"
+            BlueprintName = "LiveBundle (macOS)"
             ReferencedContainer = "container:LiveBundle.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -98,7 +65,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "75E666CA1A36E4C2001E7DC4"
             BuildableName = "LiveBundle.framework"
-            BlueprintName = "LiveBundle"
+            BlueprintName = "LiveBundle (macOS)"
             ReferencedContainer = "container:LiveBundle.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
