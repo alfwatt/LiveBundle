@@ -21,6 +21,6 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2015 iStumbler. All rights reserved.</string>
+	<string>Copyright © 2015-2018 Alf Watt - All rights reserved</string>
 </dict>
 </plist>

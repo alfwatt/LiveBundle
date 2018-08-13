@@ -34,6 +34,13 @@ NSString* const ILPlistType = @"plist";
     return firstMatch;
 }
 
++ (BOOL) trashLiveBundles
+{
+    NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSURL* liveBundlesURL = [NSURL fileURLWithPath:[searchPaths.lastObject stringByAppendingPathComponent:ILLiveBundles]];
+    return [NSFileManager.defaultManager trashItemAtURL:liveBundlesURL resultingItemURL:nil error:nil];
+}
+
 #pragma mark -
 
 - (NSString*) liveBundlePath
