@@ -22,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7552D9512161984B004FF8C8 /* config.yml */ = {isa = PBXFileReference; lastKnownFileType = text; name = config.yml; path = .circleci/config.yml; sourceTree = "<group>"; };
 		7578310320F54F8400159E5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7578313F20F5783800159E5F /* LiveBundle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveBundle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7578314120F5786300159E5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -55,6 +56,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7552D95021619823004FF8C8 /* Packaging */ = {
+			isa = PBXGroup;
+			children = (
+				7552D9512161984B004FF8C8 /* config.yml */,
+			);
+			name = Packaging;
+			sourceTree = "<group>";
+		};
 		7578310220F54F8300159E5F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -69,8 +78,9 @@
 			children = (
 				75E666F41A36E56E001E7DC4 /* README.md */,
 				75E666CD1A36E4C2001E7DC4 /* LiveBundle */,
-				75E666CC1A36E4C2001E7DC4 /* Products */,
 				7578310220F54F8300159E5F /* Frameworks */,
+				75E666CC1A36E4C2001E7DC4 /* Products */,
+				7552D95021619823004FF8C8 /* Packaging */,
 			);
 			sourceTree = "<group>";
 		};
