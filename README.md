@@ -47,6 +47,13 @@ once per launch, or as much as daily if it's running for a long time.
 
 TODO Certificte Pinning Support on top of the existing SSL Nag
 
+<a id="support"></a>
+## Support LiveBundle!
+
+Are you using LiveBundle in your apps? Would you like to help support the project and get a sponsor credit?
+
+Visit our [Patreon Page](https://www.patreon.com/istumblerlabs) and patronize us in exchange for great rewards!
+
 ## Using LiveBundle in your App
 
 - include the `LiveBundle.framework` in your applications `Resources/Frameworks` directory
