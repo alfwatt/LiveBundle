@@ -34,11 +34,25 @@ NSString* const ILPlistType = @"plist";
     return firstMatch;
 }
 
-+ (BOOL) trashLiveBundles
++ (BOOL) trashLiveBundles:(NSError**) error
 {
     NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSURL* liveBundlesURL = [NSURL fileURLWithPath:[searchPaths.lastObject stringByAppendingPathComponent:ILLiveBundles]];
-    return [NSFileManager.defaultManager trashItemAtURL:liveBundlesURL resultingItemURL:nil error:nil];
+#if TARGET_OS_MAC
+    return [NSFileManager.defaultManager trashItemAtURL:liveBundlesURL resultingItemURL:nil error:error];
+#else
+    return [NSFileManager.defaultManager removeItemAtURL:liveBundlesURL error:error];
+#endif
+}
+
++ (BOOL) trashLiveBundles
+{
+    NSError* trashError = nil;
+    BOOL wasTrashed = [self trashLiveBundles:&trashError];
+    if (!wasTrashed) {
+        NSLog(@"trashLiveBundles error: %@", trashError);
+    }
+    return wasTrashed;
 }
 
 #pragma mark -

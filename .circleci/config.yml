@@ -16,5 +16,5 @@ jobs:
           command: xcodebuild -scheme "LiveBundle (iOS)"
 
       - run:
-          name: Build LiveBUndle (macOS)
+          name: Build LiveBundle (macOS)
           command: xcodebuild -scheme "LiveBundle (macOS)"
