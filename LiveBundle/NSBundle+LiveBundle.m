@@ -39,9 +39,13 @@ NSString* const ILPlistType = @"plist";
     NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSURL* liveBundlesURL = [NSURL fileURLWithPath:[searchPaths.lastObject stringByAppendingPathComponent:ILLiveBundles]];
 #if TARGET_OS_MAC
-    return [NSFileManager.defaultManager trashItemAtURL:liveBundlesURL resultingItemURL:nil error:error];
-#else
-    return [NSFileManager.defaultManager removeItemAtURL:liveBundlesURL error:error];
+    if (@available(iOS 11.0, *)) {
+        return [NSFileManager.defaultManager trashItemAtURL:liveBundlesURL resultingItemURL:nil error:error];
+    } else {
+#endif
+        return [NSFileManager.defaultManager removeItemAtURL:liveBundlesURL error:error];
+#if TARGET_OS_MAC
+    }
 #endif
 }
 
