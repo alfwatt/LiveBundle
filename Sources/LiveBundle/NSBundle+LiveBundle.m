@@ -37,22 +37,15 @@ NSString* const ILPlistType = @"plist";
 + (BOOL) trashLiveBundles:(NSError**) error {
     NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSURL* liveBundlesURL = [NSURL fileURLWithPath:[searchPaths.lastObject stringByAppendingPathComponent:ILLiveBundles]];
-#if TARGET_OS_OSX
-    if (@available(iOS 11.0, *)) {
-        return [NSFileManager.defaultManager trashItemAtURL:liveBundlesURL resultingItemURL:nil error:error];
-    } else {
-#endif
-        return [NSFileManager.defaultManager removeItemAtURL:liveBundlesURL error:error];
-#if TARGET_OS_OSX
-    }
-#endif
+
+    return [NSFileManager.defaultManager removeItemAtURL:liveBundlesURL error:error];
 }
 
 + (BOOL) trashLiveBundles {
     NSError* trashError = nil;
     BOOL wasTrashed = [self trashLiveBundles:&trashError];
     if (!wasTrashed) {
-        NSLog(@"trashLiveBundles error: %@", trashError);
+        NSLog(@"ERROR trashLiveBundles error: %@", trashError);
     }
 
     return wasTrashed;
@@ -225,7 +218,8 @@ NSString* const ILPlistType = @"plist";
     }
     else {
         NSLog(@"WARNING livePathForResource:%@ ofType:%@ could not determine liveResourcePath from URL: %@ (did you set ILLiveBundleURLKey in your Info.plist?) returning static path %@", resource, type, remoteResourceURL, staticResourcePath);
-        return staticResourcePath;
+
+        liveResourcePath = staticResourcePath;
     }
 
     return liveResourcePath;
@@ -235,7 +229,7 @@ NSString* const ILPlistType = @"plist";
 
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error {
     if (error) {
-        NSLog(@"URLSession: %@ didBecomeInvalidWithError: %@", session, error);
+        NSLog(@"ERROR URLSession: %@ didBecomeInvalidWithError: %@", session, error);
     }
 }
 
@@ -282,7 +276,7 @@ NSString* const ILPlistType = @"plist";
         }
 
 #if DEBUG
-        NSLog(@"LiveBundle updated: %@ from: %@ original: %@", liveResourcePath,
+        NSLog(@"DEBUG LiveBundle updated: %@ from: %@ original: %@", liveResourcePath,
               download.currentRequest.URL, download.originalRequest.URL);
 #endif
 
