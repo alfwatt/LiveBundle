@@ -2,24 +2,28 @@
 # LiveBundle
 
 ## Keep your Resources Fresh
+`NSBundle+LiveBundle` is a category which provides dynamic updating of  
+resources from your web server.
 
-`NSBundle+LiveBundle` is a category which provides dynamic updating of resources from your web server.
-
-Let's say you have a resource, any resource will do, but for e.g. a plist which contains a list of your companies
-products, their prices, and links to purchase them; which is stored inside MyApplication's bundle as a resource:
+Let's say you have a resource, any resource will do, but for e.g. a plist 
+which contains a list of your companies products, their prices, and links 
+to purchase them; which is stored inside MyApplication's bundle as a resource:
 
     MyApplication.app/Contents/Resources/productTable.plist
 
-And let's say you want to add a new product, or change a price for asale, or update a link, but don't want to
-release a new version of your app or write a web server that hosts an API or the code to support it?
+And let's say you want to add a new product, or change a price for a sale, 
+or update a link, but don't want to release a new version of your app or write
+a web server that hosts an API or the code to support it?
 
-LiveBundle provides infrastructure for hosting bundle resources on your web server at a URL that you specify,
-so that your app can check to see if there is an updated version of the resource avaliable for download:
+LiveBundle provides infrastructure for hosting bundle resources on your web
+server at a URL that you specify, so that your app can check to see if there
+is an updated version of the resource avaliable for download:
 
     https://exaple.com/support/livebundle/com.example.myapplication/productsTable.plist
 
-LiveBundle makes a If-Modified-Since request to your server when the resource is requested. It
-then downloads the resource, and copies it into the users's Library folder (or it's sandboxed equivalent):
+LiveBundle makes an `If-Modified-Since:` request to your server when the 
+resource is requested. It then downloads the updated version of the resource,
+and copies it into  the users's Library folder (or it's sandboxed equivalent):
 
     ~/Library/Application Support/MyApplication/LiveBundle/com.example.myapplication/products_table.plist
 
@@ -39,18 +43,14 @@ And that's the path that your code sees when it asks for the resource:
             // update the ui...
         }];
 
-The initial path is a link back to the resource in the application's bundle, once an updated version
-has been sucesfully downloaded the notificaion will be sent to the application. Send `object:nil` to
-recieve notifications for all LiveBundle Resource Updates.
+The initial path is a link back to the resource in the application's bundle, 
+once an updated version has been sucesfully downloaded the notificaion will 
+be sent to the application. Send `object:nil` to recieve notifications for 
+all LiveBundle Resource Updates.
 
-This works well for data that changes on a weekly or monthly basis, the app should only check a URL
-once per launch, or as much as daily if it's running for a long time.
-
-## Support LiveBundle! <a id="support"></a>
-
-Are you using LiveBundle in your apps? Would you like to help support the project and get a sponsor credit?
-
-Visit our [Patreon Page](https://www.patreon.com/istumblerlabs) and patronize us in exchange for great rewards!
+This works well for data that changes on a weekly or monthly basis, the app 
+should only check a URL once per launch, or as much as daily if it's running 
+for a long time.
 
 ## Using LiveBundle in your App
 
@@ -62,10 +62,10 @@ Visit our [Patreon Page](https://www.patreon.com/istumblerlabs) and patronize us
 
 ## Swift Package <a id="spm"></a>
 
-A Swift Package is defined in `Package.swift` for projects using Swift Package Manager, 
-you can include the following URL in your project to use it:
+A Swift Package is defined in `Package.swift` for projects using Swift Package
+Manager, you can include the following URL in your project to use it:
 
-    https://github.com/iStumblerLabs/LiveBundle.git
+    https://github.com/alfwatt/LiveBundle.git
 
 ## Configure LiveBundle
 
@@ -81,13 +81,13 @@ you can include the following URL in your project to use it:
 - deploy resources to your web server and always test before you ship!
 
 ## TODO
-
 - `<NSDictionary+LiveBundle.h>` for plists loaded via `livePlistFor:...`
 - `<NSImage+LiveBundle.h>` for images loaded via `liveImageFor:...`
 - Certificte Pinning Support on top of the existing SSL Nag
 
 ## Releases
-
+- 2.0.0 - August 2026
+    - Swift conversion
 - 1.2.1 - 13 August 2024
     * Swift Package Manager Support
 - 1.2 - 12 August 2024
@@ -103,21 +103,21 @@ you can include the following URL in your project to use it:
 - 1.0 - 13 May 2016
 
 ## License
-
+    
     The MIT License (MIT)
-
-    Copyright © 2015-2024 Alf Watt
-
+    
+    Copyright © 2015-2026 Alf Watt
+    
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
-
+    
     The above copyright notice and this permission notice shall be included in all
     copies or substantial portions of the Software.
-
+    
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
