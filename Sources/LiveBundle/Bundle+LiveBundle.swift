@@ -4,7 +4,7 @@ import Foundation
 public let LiveBundleURLKey = "ILLiveBundleURLKey"
 
 /// Posted when a live bundle resource has finished downloading, with the resource's local file path as the notification's object.
-public let LiveBundleResourceUpdateNotification = Notification.Name("PluginLiveBundleResourceUpdateNote")
+public let LiveBundleResourceUpdateNotification = Notification.Name("ILLiveBundleResourceUpdateNote")
 
 /// The `plist` resource type.
 public let LiveBundlePlistType = "plist"
@@ -35,7 +35,7 @@ public extension Bundle {
     }
 
     /// Moves the application's LiveBundles directory to the trash. Returns `true` on success.
-    @discardableResult
+    @discardableResult @objc
     static func trashLiveBundles() -> Bool {
         do {
             try FileManager.default.removeItem(at: liveBundlesDirectoryURL)
