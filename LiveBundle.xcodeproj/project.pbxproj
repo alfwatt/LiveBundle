@@ -114,7 +114,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = "";
-				LastUpgradeCheck = 2700;
+				LastUpgradeCheck = 2710;
 				ORGANIZATIONNAME = "iStumbler Labs";
 				TargetAttributes = {
 					7578313120F5783800159E5F = {
