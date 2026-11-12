@@ -54,7 +54,7 @@ for a long time.
 
 ## Using LiveBundle in your App
 
-- Clone the latest sources: `git clone https://github.com/iStumblerLabs/LiveBundle.git` 
+- Clone the latest sources: `git clone https://github.com/alfwatt/LiveBundle.git` 
   near or inside your application's source 
 - Drag `LiveBundle.xcodproj` into your project
 - include the `LiveBundle.framework` in your applications `Resources/Frameworks` directory
